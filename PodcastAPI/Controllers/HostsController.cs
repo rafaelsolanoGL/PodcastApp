@@ -1,104 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PodcastAPI.Models;
+using PodcastApp.BusinessLogic;
 using PodcastApp.Data;
-using PodcastApp.Domain;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace HostAPI.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class HostsController : Controller
     {
 
-        private readonly PodcastContext _context;
-
         public HostsController(PodcastContext context)
         {
-            _context = context;
-        }
-
-
-        // GET: api/values
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Host>>> GetHosts()
-        {
-            return await _context.Hosts.ToListAsync();
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Host>> GetHost(int id)
-        {
-            var Host = await _context.Hosts.FindAsync(id);
-            if (Host == null)
-                return NotFound();
-            return Host;
+            HostLogic.SetContext(context);
         }
 
         // POST api/values
         [HttpPost]
-        public async Task<ActionResult<Host>> PostHost([FromBody]Host Host)
+        public async Task<ActionResult<HostDto>> CreateHost([FromBody]HostForCreationDto host)
         {
-            _context.Hosts.Add(Host);
-            await _context.SaveChangesAsync();
+            var returnHost = await HostLogic.CreateHostAsync(host);
+            return CreatedAtAction("GetHost", new { id = returnHost.Id }, returnHost);
+        }
 
-            return CreatedAtAction("GetHost", new { id = Host.Id }, Host);
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<HostDto>>> GetHosts()
+        {
+            var hosts = await HostLogic.GetHostsAsync();
+            return Ok(hosts);
+        }
+
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<HostDto>> GetHost(int id)
+        {
+            var host = await HostLogic.GetHostAsync(id);
+            if (host == null)
+                return NotFound();
+            return Ok(host);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHost(int id, [FromBody]Host Host)
+        public async Task<ActionResult<HostDto>> UpdateHost(int id, [FromBody]HostDto host)
         {
-            if (id != Host.Id)
+            if (id != host.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(Host).State = EntityState.Modified;
-
-            try
+            if (!HostLogic.HostExists(id))
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HostExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            HostDto returnHost = await HostLogic.UpdateHostAsync(host);
+            return Ok(returnHost);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Host>> DeleteAsync(int id)
+        public async Task<ActionResult<HostDto>> DeleteAsync(int id)
         {
-            var Host = await _context.Hosts.FindAsync(id);
-            if (Host == null)
+            if (!HostLogic.HostExists(id))
             {
                 return NotFound();
             }
-            _context.Hosts.Remove(Host);
-            await _context.SaveChangesAsync();
-            return Host;
+            var host = await HostLogic.DeleteHostAsync(id);
+            return Ok(host);
         }
 
-        
-
-        private bool HostExists (int id)
-        {
-            return _context.Hosts.Any(e => e.Id == id);
-        }
     }
 }

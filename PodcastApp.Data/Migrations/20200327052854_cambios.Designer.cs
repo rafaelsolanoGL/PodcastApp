@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PodcastApp.Data;
 
 namespace PodcastApp.Data.Migrations
 {
     [DbContext(typeof(PodcastContext))]
-    partial class PodcastContextModelSnapshot : ModelSnapshot
+    [Migration("20200327052854_cambios")]
+    partial class cambios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,9 +102,6 @@ namespace PodcastApp.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MovieId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsMainReview")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Opinion")

@@ -9,10 +9,15 @@ namespace ConsoleApp
 {
     internal class Program
     {
-        private static PodcastContext _context = new PodcastContext();
+        private static PodcastContext _context;
 
         static void Main(string[] args)
         {
+            var optionsBuilder = new DbContextOptionsBuilder<PodcastContext>();
+            
+
+            _context = new PodcastContext(optionsBuilder.UseSqlite("Data Source =  /Users/rafa/Projects/PodcastDB.db").Options);
+            
             _context.Database.EnsureCreated();
             /*GetPodcasts("Before Add:");
             InsertMultiplePodcasts();            

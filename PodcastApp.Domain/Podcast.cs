@@ -19,5 +19,6 @@ namespace PodcastApp.Domain
         public string Length { get; set; }
         public List<Timestamp> Timestamps { get; set; }
         public List<PodcastHost> PodcastHosts { get; set; }
+        public List<PodcastMovie> PodcastMovies { get; set; }
     }
 }

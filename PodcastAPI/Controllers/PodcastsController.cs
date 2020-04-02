@@ -1,129 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using PodcastAPI.Models;
+using PodcastApp.BusinessLogic;
 using PodcastApp.Data;
-using PodcastApp.Domain;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PodcastAPI.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class PodcastsController : Controller
     {
 
-        private readonly PodcastContext _context;
-
         public PodcastsController(PodcastContext context)
         {
-            _context = context;
-        }
-
-
-        // GET: api/values
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Podcast>>> GetPodcasts()
-        {
-            return await _context.Podcasts.Include(x => x.PodcastHosts).ToListAsync();
-        }
-
-        [HttpGet("{id}/2gen/")]
-        public async Task<ActionResult<IEnumerable<Podcast>>> GetPodcasts2Gen()
-        {
-            return await _context.Podcasts.Include(x => x.PodcastHosts).ThenInclude(ph => ph.Host).ToListAsync();
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Podcast>> GetPodcast(int id)
-        {
-            var podcast = await _context.Podcasts.FindAsync(id);
-            if (podcast == null)
-                return NotFound();
-            return podcast;
+            PodcastLogic.SetContext(context);
         }
 
         // POST api/values
         [HttpPost]
-        public async Task<ActionResult<Podcast>> PostPodcast([FromBody]Podcast podcast)
+        public async Task<ActionResult<PodcastDto>> CreatePodcast([FromBody]PodcastForCreationDto Podcast)
         {
-            _context.Podcasts.Add(podcast);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPodcast", new { id = podcast.Id }, podcast);
+            var returnPodcast = await PodcastLogic.CreatePodcastAsync(Podcast);
+            return CreatedAtAction("GetPodcast", new { id = returnPodcast.Id }, returnPodcast);
         }
 
-        // POST api/values/
-        [HttpPost("{id}/hosts/")]
-        public async Task<ActionResult<Podcast>> PostPodcastHosts(int id, List<int> hosts)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PodcastDto>>> GetPodcasts()
         {
-            List<PodcastHost> podcastHosts= new List<PodcastHost>();
-            foreach(int host in hosts)
-            {
-                _context.Add(new PodcastHost { PodcastId=id, HostId=host });
-            }
-            await _context.SaveChangesAsync();
-            var podcastWithHosts = _context.Podcasts.Where(p => p.Id == id)
-                .Select(x => new
-                {
-                    Podcast = x,
-                    Hosts = x.PodcastHosts.Select(ph => ph.Host)
-                });
-            return CreatedAtAction("GetPodcast", new { podcastWithHosts });
+            var Podcasts = await PodcastLogic.GetPodcastsAsync();
+            return Ok(Podcasts);
         }
 
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PodcastWithMoviesDto>> GetPodcast(int id)
+        {
+            var Podcast = await PodcastLogic.GetPodcastAsync(id);
+            if (Podcast == null)
+                return NotFound();
+            return Ok(Podcast);
+        }
+        /*
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPodcast(int id, [FromBody]Podcast podcast)
+        public async Task<ActionResult<PodcastDto>> UpdatePodcast(int id, [FromBody]PodcastDto Podcast)
         {
-            if (id != podcast.Id)
+            if (id != Podcast.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(podcast).State = EntityState.Modified;
-
-            try
+            if (!PodcastLogic.PodcastExists(id))
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PodcastExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            PodcastDto returnPodcast = await PodcastLogic.UpdatePodcastAsync(Podcast);
+            return Ok(returnPodcast);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Podcast>> DeleteAsync(int id)
+        public async Task<ActionResult<PodcastDto>> DeleteAsync(int id)
         {
-            var podcast = await _context.Podcasts.FindAsync(id);
-            if (podcast == null)
+            if (!PodcastLogic.PodcastExists(id))
             {
                 return NotFound();
             }
-            _context.Podcasts.Remove(podcast);
-            await _context.SaveChangesAsync();
-            return podcast;
-        }
+            var Podcast = await PodcastLogic.DeletePodcastAsync(id);
+            return Ok(Podcast);
+        }*/
 
-        
-
-        private bool PodcastExists (int id)
-        {
-            return _context.Podcasts.Any(e => e.Id == id);
-        }
     }
 }

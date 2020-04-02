@@ -10,5 +10,6 @@ namespace PodcastApp.Domain
         public Movie Movie { get; set; }
         public Host Host { get; set; }
         public String Opinion { get; set; }
+        public bool IsMainReview { get; set; }
     }
 }
