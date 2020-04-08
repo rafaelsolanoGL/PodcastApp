@@ -14,7 +14,7 @@ namespace Tests
         public void CanInsertPodcastIntoDatabase()
         {
             var builder = new DbContextOptionsBuilder<PodcastContext>();
-            builder.UseInMemoryDatabase("CanInsertPodcast");
+            builder.UseInMemoryDatabase("PodcastTestingDatabase");
             using (var context = new PodcastContext(builder.Options))
             {
                 var podcast = new Podcast();
@@ -32,7 +32,7 @@ namespace Tests
         {
             CanInsertPodcastIntoDatabase();
             var builder = new DbContextOptionsBuilder<PodcastContext>();
-            builder.UseInMemoryDatabase("CanInsertPodcast");
+            builder.UseInMemoryDatabase("PodcastTestingDatabase");
             using (var context = new PodcastContext(builder.Options))
             {
                 var podcast = context.Podcasts.FirstOrDefault(x => x.Title == "Test");
@@ -47,7 +47,7 @@ namespace Tests
         public void CanInsertHostIntoDatabase()
         {
             var builder = new DbContextOptionsBuilder<PodcastContext>();
-            builder.UseInMemoryDatabase("CanInsertHost");
+            builder.UseInMemoryDatabase("PodcastTestingDatabase");
             using (var context = new PodcastContext(builder.Options))
             {
                 var host = new Host();

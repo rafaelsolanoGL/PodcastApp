@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PodcastAPI.Models;
 using PodcastApp.BusinessLogic;
 using PodcastApp.Data;
+using PodcastApp.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace HostAPI.Controllers
+namespace PodcastAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -63,7 +62,7 @@ namespace HostAPI.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<HostDto>> DeleteAsync(int id)
+        public async Task<ActionResult<HostDto>> DeleteHost(int id)
         {
             if (!HostLogic.HostExists(id))
             {

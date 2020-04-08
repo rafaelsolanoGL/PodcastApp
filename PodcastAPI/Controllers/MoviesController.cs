@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PodcastAPI.Models;
 using PodcastApp.BusinessLogic;
 using PodcastApp.Data;
+using PodcastApp.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -42,6 +42,7 @@ namespace PodcastAPI.Controllers
             return CreatedAtAction("GetMovie", new { id = returnMovie.Id }, returnMovie);
         }
 
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         {
@@ -58,12 +59,14 @@ namespace PodcastAPI.Controllers
                 return NotFound();
             return Ok(Movie);
         }
-        /*
+
+
+        
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<MovieDto>> UpdateMovie(int id, [FromBody]MovieDto Movie)
+        public async Task<ActionResult<MovieDto>> UpdateMovie(int id, [FromBody]MovieDto movie)
         {
-            if (id != Movie.Id)
+            if (id != movie.Id)
             {
                 return BadRequest();
             }
@@ -71,8 +74,9 @@ namespace PodcastAPI.Controllers
             {
                 return NotFound();
             }
-            MovieDto returnMovie = await MovieLogic.UpdateMovieAsync(Movie);
+            MovieDto returnMovie = await MovieLogic.UpdateMovieAsync(movie);
             return Ok(returnMovie);
+
         }
 
         // DELETE api/values/5
@@ -85,7 +89,7 @@ namespace PodcastAPI.Controllers
             }
             var Movie = await MovieLogic.DeleteMovieAsync(id);
             return Ok(Movie);
-        }*/
+        }
 
     }
 }

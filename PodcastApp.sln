@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PodcastApp.BusinessLogic", "PodcastApp.BusinessLogic\PodcastApp.BusinessLogic.csproj", "{A9D2F35C-0196-4876-A369-288CD797F2AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PodcastApp.DTO", "PodcastApp.DTO\PodcastApp.DTO.csproj", "{E0EA903A-1483-40C3-BEA7-977669E4A7D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,5 +45,9 @@ Global
 		{A9D2F35C-0196-4876-A369-288CD797F2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9D2F35C-0196-4876-A369-288CD797F2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9D2F35C-0196-4876-A369-288CD797F2AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0EA903A-1483-40C3-BEA7-977669E4A7D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0EA903A-1483-40C3-BEA7-977669E4A7D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0EA903A-1483-40C3-BEA7-977669E4A7D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0EA903A-1483-40C3-BEA7-977669E4A7D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

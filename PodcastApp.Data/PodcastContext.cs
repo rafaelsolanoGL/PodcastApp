@@ -12,7 +12,7 @@ namespace PodcastApp.Data
 
         public PodcastContext() : base(new DbContextOptionsBuilder().UseSqlite("Data Source =  /Users/rafa/Projects/PodcastDB.db").Options)
         {
-
+             
         }
         
         public PodcastContext(DbContextOptions<PodcastContext> options) : base(options)
